@@ -1,0 +1,12 @@
+{
+  "name": "parte-1-api-memoria",
+  "version": "1.0.0",
+  "description": "Parte 1 - API Marketplace monolitica em memoria com Node.js e Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
