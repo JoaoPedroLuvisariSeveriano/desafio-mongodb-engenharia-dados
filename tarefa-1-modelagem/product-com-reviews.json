@@ -1,0 +1,33 @@
+{
+  "_id": { "$oid": "67c100000000000000000001" },
+  "sku": "SKU-00001",
+  "name": "Produto Exemplo 1",
+  "category": "Eletrônicos",
+  "price": 249.9,
+  "stock": 120,
+  "sellerId": "SELLER-12",
+  "active": true,
+  "reviewStats": {
+    "averageRating": 4.8,
+    "totalReviews": 1542,
+    "ratingSum": 7402
+  },
+  "recentReviews": [
+    {
+      "_id": { "$oid": "67c100000000000000009010" },
+      "userId": { "$oid": "67c100000000000000001042" },
+      "authorName": "Cliente 1042",
+      "rating": 5,
+      "comment": "Excelente qualidade de construção e entrega rápida.",
+      "createdAt": { "$date": "2026-11-22T18:10:00.000Z" }
+    },
+    {
+      "_id": { "$oid": "67c100000000000000009009" },
+      "userId": { "$oid": "67c100000000000000000811" },
+      "authorName": "Cliente 811",
+      "rating": 4,
+      "comment": "Bom custo-benefício para uso diário.",
+      "createdAt": { "$date": "2026-11-21T14:25:00.000Z" }
+    }
+  ]
+}

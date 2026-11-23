@@ -1,0 +1,22 @@
+{
+  "colecao": "reviews",
+  "indicesRecomendados": [
+    {
+      "keys": { "productId": 1, "createdAt": -1 },
+      "options": { "name": "idx_reviews_product_recentes" }
+    },
+    {
+      "keys": { "userId": 1, "createdAt": -1 },
+      "options": { "name": "idx_reviews_usuario" }
+    }
+  ],
+  "documentoExemplo": {
+    "_id": { "$oid": "67c100000000000000009010" },
+    "productId": { "$oid": "67c100000000000000000001" },
+    "userId": { "$oid": "67c100000000000000001042" },
+    "authorName": "Cliente 1042",
+    "rating": 5,
+    "comment": "Excelente qualidade de construção e entrega rápida.",
+    "createdAt": { "$date": "2026-11-22T18:10:00.000Z" }
+  }
+}

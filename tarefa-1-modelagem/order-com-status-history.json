@@ -1,0 +1,55 @@
+{
+  "_id": { "$oid": "67c100000000000000005001" },
+  "userId": { "$oid": "67c100000000000000001042" },
+  "shippingCity": "São Paulo",
+  "status": "DELIVERED",
+  "items": [
+    {
+      "productId": { "$oid": "67c100000000000000000001" },
+      "sku": "SKU-00001",
+      "category": "Eletrônicos",
+      "unitPrice": 249.9,
+      "quantity": 2
+    }
+  ],
+  "totalAmount": 499.8,
+  "createdAt": { "$date": "2026-11-20T10:00:00.000Z" },
+  "statusHistory": [
+    {
+      "status": "PENDING",
+      "changedAt": { "$date": "2026-11-20T10:00:00.000Z" },
+      "changedBy": {
+        "userId": { "$oid": "67c100000000000000001042" },
+        "role": "CUSTOMER",
+        "name": "Cliente 1042"
+      }
+    },
+    {
+      "status": "PAID",
+      "changedAt": { "$date": "2026-11-20T10:00:14.000Z" },
+      "changedBy": {
+        "userId": null,
+        "role": "PAYMENT_GATEWAY",
+        "name": "Stripe Webhook"
+      }
+    },
+    {
+      "status": "SHIPPED",
+      "changedAt": { "$date": "2026-11-21T09:30:00.000Z" },
+      "changedBy": {
+        "userId": "SELLER-12",
+        "role": "SELLER",
+        "name": "Loja Oficial Eletrônicos"
+      }
+    },
+    {
+      "status": "DELIVERED",
+      "changedAt": { "$date": "2026-11-22T15:45:00.000Z" },
+      "changedBy": {
+        "userId": null,
+        "role": "CARRIER",
+        "name": "Transportadora Express"
+      }
+    }
+  ]
+}
