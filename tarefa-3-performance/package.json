@@ -1,0 +1,11 @@
+{
+  "name": "tarefa-3-performance",
+  "version": "1.0.0",
+  "description": "Tarefa 3 - Diagnostico e otimizacao de performance com indices compostos (Regra ESR)",
+  "scripts": {
+    "start": "node benchmark-indices.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.13.0"
+  }
+}

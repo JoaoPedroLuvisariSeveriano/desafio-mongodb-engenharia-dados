@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tarefa 3 — Diagnóstico e Otimização de Performance (ESR)</title>
+  <style>
+    body { margin: 0; padding: 28px; font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .hero { display: flex; justify-content: space-between; align-items: center; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+    h1 { margin: 0 0 6px; font-size: 22px; color: #f8fafc; }
+    .sub { margin: 0; font-size: 13px; color: #94a3b8; }
+    .badge { padding: 8px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; font-size: 13px; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+    .kpi { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px 16px; }
+    .kpi .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi .val { font-size: 22px; font-weight: 700; margin-top: 6px; color: #34d399; }
+    .kpi .desc { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+    .panel { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+    h2 { margin: 0 0 12px; font-size: 16px; color: #f8fafc; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #334155; text-align: left; }
+    th { color: #94a3b8; font-size: 11px; text-transform: uppercase; }
+    .bad { color: #f87171; font-weight: 700; }
+    .good { color: #34d399; font-weight: 700; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    pre { margin: 0; background: #0b1120; border: 1px solid #334155; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.45; color: #cbd5e1; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Tarefa 3 — Benchmark de Performance com .explain("executionStats")</h1>
+        <p class="sub">Índice Composto ESR: { shippingCity: 1, status: 1, createdAt: -1 } sobre 100.000 documentos em marketplace.orders</p>
+      </div>
+      <div class="badge">COLLSCAN → IXSCAN (-99.45% docs lidos)</div>
+    </div>
+
+    <div class="cards">
+      <div class="kpi"><div class="label">Tempo (Antes → Depois)</div><div class="val">50ms → 2ms</div><div class="desc">25.0x mais rápido</div></div>
+      <div class="kpi"><div class="label">Docs Examinados</div><div class="val">100.000 → 547</div><div class="desc">Redução de 99.45%</div></div>
+      <div class="kpi"><div class="label">Chaves Examinadas</div><div class="val">0 → 547</div><div class="desc">Seletividade máxima 1:1</div></div>
+      <div class="kpi"><div class="label">Documentos Retornados</div><div class="val">547</div><div class="desc">Sem SORT em memória</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>Comparativo Oficial Antes × Depois</h2>
+      <table>
+        <thead>
+          <tr><th>Métrica</th><th>Antes (Sem Índice)</th><th>Depois (Índice ESR)</th><th>Resultado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Estágio do Plano</td><td class="bad">SORT -> COLLSCAN</td><td class="good">FETCH -> IXSCAN (idx_orders_city_status_createdAt_esr)</td><td>Eliminou COLLSCAN e SORT em memória</td></tr>
+          <tr><td>executionTimeMillis</td><td class="bad">50 ms</td><td class="good">2 ms</td><td>25.0x mais rápido</td></tr>
+          <tr><td>totalDocsExamined</td><td class="bad">100.000</td><td class="good">547</td><td>-99.45% documentos lidos em disco/cache</td></tr>
+          <tr><td>totalKeysExamined</td><td>0</td><td class="good">547</td><td>Leitura direta pela B-Tree composta</td></tr>
+          <tr><td>nReturned</td><td>547</td><td>547</td><td>Consistência 100% preservada</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cols">
+      <div class="panel">
+        <h2>Explain Antes (COLLSCAN + SORT)</h2>
+        <pre>{
+  "winningPlan": {
+    "stage": "SORT",
+    "sortPattern": {
+      "createdAt": -1
+    },
+    "memLimit": 104857600,
+    "type": "simple",
+    "inputStage": {
+      "stage": "COLLSCAN",
+      "filter": {
+        "$and": [
+          {
+            "shippingCity": {
+              "$eq": "São Paulo"
+            }
+          },
+          {
+            "status": {
+              "$eq": "DELIVERED"
+            }
+          },
+          {
+            "createdAt": {
+              "$gte": "2026-10-24T17:34:31.029Z"
+            }
+          }
+        ]
+      },
+      "direction": "forward"
+    }
+  },
+  "executionTimeMillis": 50,
+  "totalDocsExamined": 100000,
+  "totalKeysExamined": 0,
+  "nReturned": 547
+}</pre>
+      </div>
+      <div class="panel">
+        <h2>Explain Depois (IXSCAN + FETCH)</h2>
+        <pre>{
+  "winningPlan": {
+    "stage": "FETCH",
+    "inputStage": {
+      "stage": "IXSCAN",
+      "keyPattern": {
+        "shippingCity": 1,
+        "status": 1,
+        "createdAt": -1
+      },
+      "indexName": "idx_orders_city_status_createdAt_esr",
+      "isMultiKey": false,
+      "multiKeyPaths": {
+        "shippingCity": [],
+        "status": [],
+        "createdAt": []
+      },
+      "isUnique": false,
+      "isSparse": false,
+      "isPartial": false,
+      "indexVersion": 2,
+      "direction": "forward",
+      "indexBounds": {
+        "shippingCity": [
+          "[\"São Paulo\", \"São Paulo\"]"
+        ],
+        "status": [
+          "[\"DELIVERED\", \"DELIVERED\"]"
+        ],
+        "createdAt": [
+          "[new Date(9223372036854775807), new Date(1792863271029)]"
+        ]
+      }
+    }
+  },
+  "executionTimeMillis": 2,
+  "totalDocsExamined": 547,
+  "totalKeysExamined": 547,
+  "nReturned": 547
+}</pre>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
