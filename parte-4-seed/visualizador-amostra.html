@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parte 4 — Amostra Real do Banco (amostra-banco.js)</title>
+  <style>
+    body { margin: 0; padding: 28px; font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .hero { display: flex; justify-content: space-between; align-items: center; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+    h1 { margin: 0 0 6px; font-size: 22px; color: #f8fafc; }
+    .sub { margin: 0; font-size: 13px; color: #94a3b8; }
+    .badge { padding: 8px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; font-size: 13px; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+    .kpi { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px 16px; }
+    .kpi .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi .val { font-size: 26px; font-weight: 700; margin-top: 6px; color: #38bdf8; }
+    .kpi .desc { font-size: 12px; color: #34d399; margin-top: 4px; }
+    .panel { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+    h2 { margin: 0 0 12px; font-size: 16px; color: #f8fafc; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #334155; text-align: left; }
+    th { color: #94a3b8; font-size: 11px; text-transform: uppercase; }
+    .good { color: #34d399; font-weight: 700; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+    .cols .panel { margin-bottom: 0; }
+    pre { margin: 0; background: #0b1120; border: 1px solid #334155; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.45; color: #cbd5e1; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Parte 4 — Amostra Real do Banco (amostra-banco.js)</h1>
+        <p class="sub">Verificação após seed em lote no banco marketplace • Execução em 2026-11-23T17:16:36.457Z</p>
+      </div>
+      <div class="badge">106.000 Documentos • Apenas _id_ ✓</div>
+    </div>
+
+    <div class="cards">
+      <div class="kpi"><div class="label">Coleção products</div><div class="val">1.000</div><div class="desc">Esperado: 1.000 ✓</div></div>
+      <div class="kpi"><div class="label">Coleção users</div><div class="val">5.000</div><div class="desc">Esperado: 5.000 ✓</div></div>
+      <div class="kpi"><div class="label">Coleção orders</div><div class="val">100.000</div><div class="desc">Esperado: 100.000 ✓</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>Índices Existentes (Comprovação de Ausência de Índices Secundários)</h2>
+      <table>
+        <thead>
+          <tr><th>Coleção</th><th>Índices Presentes</th><th>Apenas _id_?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>products</strong></td><td><code>_id_ ({"_id":1})</code></td><td class="good">✓ Sim (Sem índices secundários)</td></tr>
+          <tr><td><strong>users</strong></td><td><code>_id_ ({"_id":1})</code></td><td class="good">✓ Sim (Sem índices secundários)</td></tr>
+          <tr><td><strong>orders</strong></td><td><code>_id_ ({"_id":1})</code></td><td class="good">✓ Sim (Sem índices secundários)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cols">
+      <div class="panel">
+        <h2>Documento de Amostra — products (1 de 1.000)</h2>
+        <pre>{
+  "_id": "6b0474f2457592851c1fe45c",
+  "sku": "SKU-00001",
+  "name": "Produto Exemplo 1",
+  "category": "Moda",
+  "price": 184.75,
+  "stock": 354,
+  "sellerId": "SELLER-5",
+  "active": true
+}</pre>
+      </div>
+      <div class="panel">
+        <h2>Documento de Amostra — users (1 de 5.000)</h2>
+        <pre>{
+  "_id": "6b0474f2457592851c1fe844",
+  "name": "Cliente 1",
+  "email": "cliente1@exemplo.com",
+  "city": "Recife",
+  "walletBalance": 1124.66,
+  "createdAt": "2026-07-03T04:07:45.899Z"
+}</pre>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Documento de Amostra — orders (1 de 100.000)</h2>
+      <pre>{
+  "_id": "6b0474f2457592851c1ffbcc",
+  "userId": "6b0474f2457592851c1ff7c6",
+  "shippingCity": "Belo Horizonte",
+  "status": "SHIPPED",
+  "items": [
+    {
+      "productId": "6b0474f2457592851c1fe6bf",
+      "sku": "SKU-00612",
+      "category": "Casa e Cozinha",
+      "unitPrice": 254.33,
+      "quantity": 3
+    },
+    {
+      "productId": "6b0474f2457592851c1fe7b3",
+      "sku": "SKU-00856",
+      "category": "Livros",
+      "unitPrice": 493.45,
+      "quantity": 1
+    },
+    {
+      "productId": "6b0474f2457592851c1fe6b6",
+      "sku": "SKU-00603",
+      "category": "Casa e Cozinha",
+      "unitPrice": 95.33,
+      "quantity": 2
+    },
+    {
+      "productId": "6b0474f2457592851c1fe786",
+      "sku": "SKU-00811",
+      "category": "Livros",
+      "unitPrice": 457.16,
+      "quantity": 2
+    }
+  ],
+  "totalAmount": 2361.42,
+  "createdAt": "2026-05-31T20:19:25.107Z"
+}</pre>
+    </div>
+  </div>
+</body>
+</html>
