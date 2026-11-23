@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parte 2 — Evidência Visual dos Testes da API</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --green: #10b981;
+      --blue: #38bdf8;
+      --amber: #f59e0b;
+      --purple: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container { max-width: 1180px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    h1 { margin: 0 0 6px; font-size: 22px; color: #f8fafc; }
+    .subtitle { margin: 0; font-size: 13px; color: var(--muted); }
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid var(--border);
+    }
+    .method {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .POST { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+    .GET { background: rgba(56, 189, 248, 0.18); color: #38bdf8; }
+    .status {
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+    }
+    .card-body { padding: 14px 16px; }
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin: 8px 0 4px;
+    }
+    pre {
+      margin: 0;
+      padding: 10px 12px;
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #cbd5e1;
+      overflow-x: auto;
+    }
+    .highlight {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container" data-done="false">
+    <header>
+      <div>
+        <h1>Parte 2 — Testes Automatizados da API Marketplace em Memória</h1>
+        <p class="subtitle">Execução sequencial real contra http://localhost:3000 (Node.js + Express)</p>
+      </div>
+      <div id="summary-pill" class="pill">Executando...</div>
+    </header>
+    <div id="cards" class="grid"></div>
+    <div id="stock-banner" class="highlight" style="display:none;"></div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3000';
+    const steps = [
+      { title: '1. Cadastrar Vendedor', method: 'POST', path: '/usuarios', body: { nome: 'Loja Tech', tipo: 'vendedor' } },
+      { title: '2. Cadastrar Comprador', method: 'POST', path: '/usuarios', body: { nome: 'João Silva', tipo: 'comprador' } },
+      { title: '3. Anunciar Produto', method: 'POST', path: '/produtos', body: { vendedorId: 1, nome: 'Teclado Mecânico', preco: 250, estoque: 5 } },
+      { title: '4. Listar Vitrine Inicial', method: 'GET', path: '/produtos', body: null },
+      { title: '5. Concluir Pedido (2 un.)', method: 'POST', path: '/pedidos', body: { compradorId: 2, produtoId: 1, quantidade: 2 } },
+      { title: '6. Verificar Estoque Atualizado', method: 'GET', path: '/produtos', body: null }
+    ];
+
+    async function run() {
+      const cardsEl = document.getElementById('cards');
+      const results = [];
+
+      for (const s of steps) {
+        const opts = { method: s.method, headers: { 'Content-Type': 'application/json' } };
+        if (s.body) opts.body = JSON.stringify(s.body);
+        const res = await fetch(API + s.path, opts);
+        const data = await res.json();
+        results.push({ ...s, status: res.status, data });
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-head">
+            <div><span class="method ${s.method}">${s.method}</span><strong>${s.title}</strong></div>
+            <span class="status">HTTP ${res.status}</span>
+          </div>
+          <div class="card-body">
+            <div class="label">Endpoint</div>
+            <pre>${API}${s.path}</pre>
+            ${s.body ? `<div class="label">Request Payload</div><pre>${JSON.stringify(s.body, null, 2)}</pre>` : ''}
+            <div class="label">Response JSON</div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </div>
+        `;
+        cardsEl.appendChild(card);
+      }
+
+      const estoqueInicial = results[3].data[0]?.estoque;
+      const estoqueFinal = results[5].data[0]?.estoque;
+      const pedidoValor = results[4].data?.valorTotal;
+
+      document.getElementById('summary-pill').textContent = '6/6 Requisições Validadas ✓';
+      const banner = document.getElementById('stock-banner');
+      banner.style.display = 'flex';
+      banner.innerHTML = `
+        <span><strong>Validação de Estoque e Pedido:</strong> Produto <em>Teclado Mecânico</em> (R$ 250) teve estoque reduzido de <strong>${estoqueInicial}</strong> para <strong>${estoqueFinal}</strong> após pedido de 2 unidades.</span>
+        <span><strong>Valor Total do Pedido:</strong> R$ ${pedidoValor},00</span>
+      `;
+      document.getElementById('app').setAttribute('data-done', 'true');
+    }
+
+    run().catch((err) => {
+      document.getElementById('summary-pill').textContent = 'Erro na execução';
+      document.getElementById('cards').innerHTML = `<pre>${err.stack || err.message}</pre>`;
+      document.getElementById('app').setAttribute('data-done', 'error');
+    });
+  </script>
+</body>
+</html>

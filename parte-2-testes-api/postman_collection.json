@@ -1,0 +1,70 @@
+{
+  "info": {
+    "name": "Desafio MongoDB - Parte 2 (API Marketplace em Memória)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. POST /usuarios (Vendedor - Loja Tech)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Loja Tech\",\n  \"tipo\": \"vendedor\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/usuarios", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["usuarios"] }
+      }
+    },
+    {
+      "name": "2. POST /usuarios (Comprador - João Silva)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"João Silva\",\n  \"tipo\": \"comprador\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/usuarios", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["usuarios"] }
+      }
+    },
+    {
+      "name": "3. POST /produtos (Teclado Mecânico - estoque 5)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"vendedorId\": 1,\n  \"nome\": \"Teclado Mecânico\",\n  \"preco\": 250,\n  \"estoque\": 5\n}"
+        },
+        "url": { "raw": "http://localhost:3000/produtos", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["produtos"] }
+      }
+    },
+    {
+      "name": "4. GET /produtos (Vitrine inicial)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3000/produtos", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["produtos"] }
+      }
+    },
+    {
+      "name": "5. POST /pedidos (2 unidades)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"compradorId\": 2,\n  \"produtoId\": 1,\n  \"quantidade\": 2\n}"
+        },
+        "url": { "raw": "http://localhost:3000/pedidos", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["pedidos"] }
+      }
+    },
+    {
+      "name": "6. GET /produtos (Confirmar estoque 3)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3000/produtos", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["produtos"] }
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+### 1. Cadastrar vendedor (Loja Tech)
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Loja Tech",
+  "tipo": "vendedor"
+}
+
+### 2. Cadastrar comprador (João Silva)
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "tipo": "comprador"
+}
+
+### 3. Anunciar produto (Teclado Mecânico)
+POST http://localhost:3000/produtos
+Content-Type: application/json
+
+{
+  "vendedorId": 1,
+  "nome": "Teclado Mecânico",
+  "preco": 250,
+  "estoque": 5
+}
+
+### 4. Listar vitrine inicial de produtos
+GET http://localhost:3000/produtos
+
+### 5. Realizar pedido de 2 unidades (estoque cai de 5 para 3)
+POST http://localhost:3000/pedidos
+Content-Type: application/json
+
+{
+  "compradorId": 2,
+  "produtoId": 1,
+  "quantidade": 2
+}
+
+### 6. Confirmar atualização de estoque na vitrine (estoque = 3)
+GET http://localhost:3000/produtos

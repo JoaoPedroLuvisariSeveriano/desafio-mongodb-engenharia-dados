@@ -1,0 +1,8 @@
+{
+  "name": "parte-2-testes-api",
+  "version": "1.0.0",
+  "description": "Parte 2 - Scripts e colecoes de teste para a API Marketplace em memoria",
+  "scripts": {
+    "test": "node testar-api.js"
+  }
+}
