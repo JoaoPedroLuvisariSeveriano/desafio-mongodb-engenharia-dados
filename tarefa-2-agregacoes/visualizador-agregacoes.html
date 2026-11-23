@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tarefa 2 — Aggregation Framework (Resultados Reais)</title>
+  <style>
+    body { margin: 0; padding: 28px; font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .hero { display: flex; justify-content: space-between; align-items: center; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+    h1 { margin: 0 0 6px; font-size: 22px; color: #f8fafc; }
+    .sub { margin: 0; font-size: 13px; color: #94a3b8; }
+    .badge { padding: 8px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; font-size: 13px; }
+    .grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px; }
+    .panel { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; }
+    .panel h2 { margin: 0 0 4px; font-size: 16px; color: #f8fafc; }
+    .meta { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid #334155; text-align: left; }
+    th { color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .kpi { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; }
+    .kpi .k { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+    .kpi .v { font-size: 18px; font-weight: 700; color: #38bdf8; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Tarefa 2 — Aggregation Framework sobre 100.000 Pedidos</h1>
+        <p class="sub">Pipelines executados 100% no MongoDB (zero manipulação de arrays no Node.js)</p>
+      </div>
+      <div class="badge">MongoDB Aggregation Engine ✓</div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>1. Faturamento por Categoria (Últimos 90 dias)</h2>
+        <div class="meta">Status: PAID, SHIPPED, DELIVERED • Tempo: 159 ms</div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Categoria</th><th class="num">Itens</th><th class="num">Faturamento (R$)</th></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>1</td>
+                <td><strong>Livros</strong></td>
+                <td class="num">31.640</td>
+                <td class="num">R$ 8.823.045,12</td>
+              </tr>
+            
+              <tr>
+                <td>2</td>
+                <td><strong>Casa e Cozinha</strong></td>
+                <td class="num">29.352</td>
+                <td class="num">R$ 8.254.224,58</td>
+              </tr>
+            
+              <tr>
+                <td>3</td>
+                <td><strong>Esportes</strong></td>
+                <td class="num">28.972</td>
+                <td class="num">R$ 7.993.407,52</td>
+              </tr>
+            
+              <tr>
+                <td>4</td>
+                <td><strong>Eletrônicos</strong></td>
+                <td class="num">31.192</td>
+                <td class="num">R$ 7.950.236,18</td>
+              </tr>
+            
+              <tr>
+                <td>5</td>
+                <td><strong>Moda</strong></td>
+                <td class="num">28.417</td>
+                <td class="num">R$ 7.447.656,85</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>2. Ranking Clientes VIP — São Paulo ($facet + $lookup pós-$limit)</h2>
+        <div class="meta">Status efetivados • Apenas 10 $lookups executados na página • Tempo: 58 ms</div>
+        <div class="kpis">
+          <div class="kpi"><div class="k">Clientes Elegíveis</div><div class="v">858</div></div>
+          <div class="kpi"><div class="k">Página / Limite</div><div class="v">1 / 10</div></div>
+          <div class="kpi"><div class="k">Total de Páginas</div><div class="v">86</div></div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Cliente</th><th>E-mail</th><th class="num">Pedidos</th><th class="num">Total Gasto</th></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>1</td>
+                <td><strong>Cliente 673</strong></td>
+                <td>cliente673@exemplo.com</td>
+                <td class="num">23</td>
+                <td class="num">R$ 34.422,37</td>
+              </tr>
+            
+              <tr>
+                <td>2</td>
+                <td><strong>Cliente 1207</strong></td>
+                <td>cliente1207@exemplo.com</td>
+                <td class="num">19</td>
+                <td class="num">R$ 34.047,40</td>
+              </tr>
+            
+              <tr>
+                <td>3</td>
+                <td><strong>Cliente 1645</strong></td>
+                <td>cliente1645@exemplo.com</td>
+                <td class="num">26</td>
+                <td class="num">R$ 33.575,93</td>
+              </tr>
+            
+              <tr>
+                <td>4</td>
+                <td><strong>Cliente 2363</strong></td>
+                <td>cliente2363@exemplo.com</td>
+                <td class="num">19</td>
+                <td class="num">R$ 32.297,46</td>
+              </tr>
+            
+              <tr>
+                <td>5</td>
+                <td><strong>Cliente 430</strong></td>
+                <td>cliente430@exemplo.com</td>
+                <td class="num">19</td>
+                <td class="num">R$ 31.977,33</td>
+              </tr>
+            
+              <tr>
+                <td>6</td>
+                <td><strong>Cliente 1042</strong></td>
+                <td>cliente1042@exemplo.com</td>
+                <td class="num">17</td>
+                <td class="num">R$ 31.888,16</td>
+              </tr>
+            
+              <tr>
+                <td>7</td>
+                <td><strong>Cliente 4350</strong></td>
+                <td>cliente4350@exemplo.com</td>
+                <td class="num">20</td>
+                <td class="num">R$ 31.744,55</td>
+              </tr>
+            
+              <tr>
+                <td>8</td>
+                <td><strong>Cliente 1530</strong></td>
+                <td>cliente1530@exemplo.com</td>
+                <td class="num">22</td>
+                <td class="num">R$ 31.202,59</td>
+              </tr>
+            
+              <tr>
+                <td>9</td>
+                <td><strong>Cliente 2576</strong></td>
+                <td>cliente2576@exemplo.com</td>
+                <td class="num">16</td>
+                <td class="num">R$ 30.371,12</td>
+              </tr>
+            
+              <tr>
+                <td>10</td>
+                <td><strong>Cliente 3297</strong></td>
+                <td>cliente3297@exemplo.com</td>
+                <td class="num">18</td>
+                <td class="num">R$ 29.936,88</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

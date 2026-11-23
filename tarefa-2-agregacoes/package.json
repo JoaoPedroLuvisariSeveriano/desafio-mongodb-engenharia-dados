@@ -1,0 +1,11 @@
+{
+  "name": "tarefa-2-agregacoes",
+  "version": "1.0.0",
+  "description": "Tarefa 2 - Pipelines no Aggregation Framework do MongoDB",
+  "scripts": {
+    "start": "node agregacoes.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.13.0"
+  }
+}
