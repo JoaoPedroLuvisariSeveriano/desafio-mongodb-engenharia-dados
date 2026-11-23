@@ -1,0 +1,12 @@
+{
+  "name": "parte-4-seed",
+  "version": "1.0.0",
+  "description": "Parte 4 - Script de seed em lote (1k produtos, 5k usuarios, 100k pedidos) e amostra do banco",
+  "scripts": {
+    "seed": "node seed.js",
+    "sample": "node amostra-banco.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.13.0"
+  }
+}
