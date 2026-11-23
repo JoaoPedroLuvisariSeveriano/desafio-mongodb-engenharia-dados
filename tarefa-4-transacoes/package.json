@@ -1,0 +1,11 @@
+{
+  "name": "tarefa-4-transacoes",
+  "version": "1.0.0",
+  "description": "Tarefa 4 - Checkout transacional ACID com Replica Set e rollback garantido",
+  "scripts": {
+    "test": "node testar-transacoes.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.13.0"
+  }
+}
