@@ -1,0 +1,15 @@
+{
+  "name": "parte-3-api-mongodb",
+  "version": "1.0.0",
+  "description": "Parte 3 - API Marketplace com persistencia em MongoDB e Mongoose",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node testar-persistencia.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.1"
+  }
+}
